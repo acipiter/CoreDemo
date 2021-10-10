@@ -9,7 +9,7 @@ namespace BusinessLayer.Abstract
 {
     public interface ICategoryService
     {
-        void AddCategory(Category Category);
+        void AddCategory(Category category);
         void DeleteCategory(Category category);
         void UpdateCategory(Category category);
         List<Category> GetAllCategory();
