@@ -30,12 +30,7 @@ namespace BusinessLayer.Concrete
 
         public List<Blog> GetAllBlog()
         {
-            return _blogDal.GetAll();
-        }
-
-        public Blog GetBlogById(int id)
-        {
-            throw new NotImplementedException();
+            return _blogDal.GetListAll();
         }
 
         public List<Blog> GetBlogListWithCategory()
@@ -43,9 +38,20 @@ namespace BusinessLayer.Concrete
             return _blogDal.GetListWithCategory();
         }
 
+        public List<Blog> GetBlogById(int id)
+        {
+            return _blogDal.GetListAll(x => x.BlogId == id);
+        }
+
         public void UpdateBlog(Blog blog)
         {
             throw new NotImplementedException();
         }
+
+        public Blog GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
