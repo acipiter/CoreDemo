@@ -25,7 +25,7 @@ namespace BusinessLayer.Concrete
 
         public List<Comment> GetList(int id) //derste buraya id vermiş ancak ben yazınca implement hatası veriyor.
         {
-            var values = _commentDal.GetListAll(x => x.BlogId == 4);
+            var values = _commentDal.GetListAll(x => x.BlogId == id);
             return (values);
         }
     }
