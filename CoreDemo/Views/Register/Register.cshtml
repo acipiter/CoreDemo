@@ -1,4 +1,4 @@
-﻿
+﻿@model List<CitiesViewModel>
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_WebLayout.cshtml";
@@ -14,21 +14,21 @@
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom01">Adınız soyadınız</label>
 
-                            <input type="text" class="form-control" id="validationDefault01" placeholder="" name="WriterName" required>
+                            <input type="text" class="form-control" id="WriterName" placeholder="" name="WriterName" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom02">Mail adresi</label>
-                            <input type="email" class="form-control" id="validationDefault02" placeholder="" name="WriterMail" required>
+                            <input type="email" class="form-control" id="WriterMail" placeholder="" name="WriterMail" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="PasswordSet mb-2">Şifre</label>
-                            <input type="password" class="form-control" id="PasswordSet" placeholder="" name="WriterPassword" required>
+                            <input type="password" class="form-control" id="WriterPassword" placeholder="" name="WriterPassword" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="PasswordConfirm mb-2">Şifre</label>
-                            <input type="password" class="form-control" id="PasswordConfirm" placeholder="" name="WriterPasswordConfirm" required>
+                            <input type="password" class="form-control" placeholder="" id="PasswordConfirm" name="PasswordConfirm" required>
                         </div>
 
                     </div>
@@ -40,15 +40,21 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="WriterCity mb-2">Şehir</label>
-                            <input type="text" class="form-control" id="WriterCity" placeholder="" name="WriterCity">
+                            <select class="form-control">
+                                <option selected>Şehir seçiniz</option>
+                                @foreach (var item in Model)
+                                {
+                                    <option value="@item.CityId">@item.CityName</option>
+                                }
+                            </select>
                         </div>
                     </div>
-                    <button type="submit" id="register" class="btn btn-primary submit mb-4">Kayıt ol</button>
                     <p>
-                        <a href="#">Tüm şartları okudum, kabul ediyorum.</a>
+                        <input type="checkbox" id="AgreementCheck" name="AgreementCheck" />
+                        <a href="#" id="Agreement">Tüm şartları okudum, kabul ediyorum.</a>
                     </p>
+                    <button type="submit" id="register" class="btn btn-primary submit mb-4">Kayıt ol</button>
                 </form>
-
 
             </div>
         </div>
@@ -57,31 +63,72 @@
 
 @section CustomScripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+
             
             $("#UserRegister").validate({
                 rules: {
+                    WriterName: {
+                        required: true,
+                    },
+                    WriterMail: {
+                        required: true,
+                    },
                     WriterPassword: {
                         required: true,
                     },
-                    WriterPasswordConfirm: {
+                    PasswordConfirm: {
                         required: true,
-                        equalTo: "#passwordSet"
+                        equalTo: "#PasswordSet"
+                    },
+                    AgreementCheck: {
+                        required: true,
                     }
                 },
                 messages: {
+                    WriterName: {
+                        required: "Bu alanın doldurulması zorunludur.",
+                    },
+                    WriterMail: {
+                        required: "Bu alanın doldurulması zorunludur.",
+                    },
                     WriterPassword: {
                         required: "Bu alanın doldurulması zorunludur.",
                     },
-                    WriterPasswordConfirm: {
+                    PasswordConfirm: {
                         required: "Bu alanın doldurulması zorunludur.",
                         equalTo: "Lütfen şifrelerin birbiriyle aynı olduğundan emin olun."
+                    },
+                    AgreementCheck: {
+                        required: "Şartlar kabul edilmediği taktirde kayıt işlemi gerçekleşmeyecektir.",
                     }
                 }
             });
-            
+
         })
+        var AgreementText = "Sitemizde verdiğiniz mail adresi üzerinden bilgi ve haber e-postaları spam ölçüsüne varmadan gönderilmeye devam edilecektir. Eğer e-posta bülteninden çıkmak isterseniz mail ileti dizisini durdurabilirsiniz, şifre ve mail adresleriniz şifrelenmiş formatta herhangi bir kullanıcının göremeyeceği şekilde veritabanlarımızda saklanmaktadır.";
+
+        $("#Agreement").on('click', function () {
+
+            Swal.fire({
+                title: 'Kullanım şartları',
+                text: AgreementText,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'Kabul Ediyorum',
+                denyButtonText: 'Kabul Etmiyorum'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $("#AgreementCheck").prop('checked', true);
+                } else if (result.isDenied) {
+                    $("#AgreementCheck").prop('checked', false);
+                }
+            })
+        });
     </script>
 }
 
